@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <title>MODEL</title>
+  <link rel="stylesheet" href="model.css">
+</head>
+
+<body>
+
+  <button onclick="toggleTheme()" id="themeToggle">🌙 / ☀</button>
+
+  <div class="app monarchGrid">
+
+    <!-- ================= PLAYER CORE ================= -->
+    <div class="container player-container core panel" data-title="PLAYER CORE">
+
+      <div class="panel panel-left">
+        <h1>ARISE</h1>
+
+        <div class="stats">
+          <p>Level: <span id="level">1</span></p>
+          <p>XP: <span id="xp">0</span> / <span id="xpNeeded">100</span></p>
+          <div class="stat">Coins: <span id="coins">0</span>🪙</div>
+
+          <div class="xp-bar">
+            <div id="xpFill"></div>
+          </div>
+
+          <p>Rank: <span id="rank" class="rank-E">E</span></p>
+        </div>
+
+        <h3>Player Stats</h3>
+
+        <ul class="stats-list stat-bars">
+          <li id="stat-wrap-str">
+            <div class="stat-header">STR <span id="stat-str"></span></div>
+            <div class="stat-bar">
+              <div id="bar-str"></div>
+            </div>
+          </li>
+          <li id="stat-wrap-agi">
+            <div class="stat-header">AGI <span id="stat-agi"></span></div>
+            <div class="stat-bar">
+              <div id="bar-agi"></div>
+            </div>
+          </li>
+          <li id="stat-wrap-end">
+            <div class="stat-header">END <span id="stat-end"></span></div>
+            <div class="stat-bar">
+              <div id="bar-end"></div>
+            </div>
+          </li>
+          <li id="stat-wrap-spd">
+            <div class="stat-header">SPD <span id="stat-spd"></span></div>
+            <div class="stat-bar">
+              <div id="bar-spd"></div>
+            </div>
+          </li>
+          <li id="stat-wrap-int">
+            <div class="stat-header">INT <span id="stat-int"></span></div>
+            <div class="stat-bar">
+              <div id="bar-int"></div>
+            </div>
+          </li>
+          <li id="stat-wrap-ctrl">
+            <div class="stat-header">CTRL <span id="stat-ctrl"></span></div>
+            <div class="stat-bar">
+              <div id="bar-ctrl"></div>
+            </div>
+          </li>
+        </ul>
+
+        <button class="reset-btn" id="resetBtn">Reset Progress</button>
+      </div>
+
+    </div>
+
+    <!-- ================= ARTIFACT VAULT ================= -->
+    <div class="container vault-container artifacts panel" data-title="SYSTEM VAULT">
+
+      <div class="panel vault-panel">
+
+        <h2 class="vault-title">SYSTEM VAULT</h2>
+        <p class="vault-sub">Authorized artifacts only. One-time use.</p>
+
+        <div class="artifact-card" id="safeguardCard">
+          <div class="artifact-header">
+            <span class="rarity" id="sg-rarity">RARE</span>
+            <h3>System Safeguard</h3>
+          </div>
+
+          <p class="artifact-desc">Prevents the System from enforcing failure penalties once.</p>
+
+          <ul class="artifact-rules">
+            <li>✔ One-time use</li>
+            <li>✔ Difficulty bound</li>
+            <li>✖ Cannot override Extreme Streak contracts</li>
+          </ul>
+
+          <select id="protectionDifficulty" class="artifact-select">
+            <option value="easy">Common — 1,000🪙</option>
+            <option value="normal">Uncommon — 2,000🪙</option>
+            <option value="hard">Rare — 5,000🪙</option>
+            <option value="extreme">Legendary — 10,000🪙</option>
+          </select>
+
+          <button class="artifact-btn" onclick="buyProtection()">AUTHORIZE</button>
+        </div>
+
+        <div class="artifact-card legendary">
+          <div class="artifact-header">
+            <span class="rarity legendary">LEGENDARY</span>
+            <h3>Authority Seal</h3>
+          </div>
+
+          <p class="artifact-desc">Grants authority to erase an active System contract.</p>
+
+          <ul class="artifact-rules">
+            <li>✔ Works on any quest</li>
+            <li>✖ No rewards</li>
+            <li>✖ No streak progress</li>
+          </ul>
+
+          <button class="artifact-btn danger" onclick="buySkip()">AUTHORIZE — 10,000🪙</button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ================= QUEST CREATION ================= -->
+    <div class="container quest-system-container quests panel" data-title="QUEST FORGE">
+
+      <div class="panel panel-right quest-panel">
+
+        <div class="quest-box">
+
+          <div class="add-habit">
+            <input id="habitName" placeholder="Quest Name">
+            <input id="habitXP" type="number" placeholder="XP">
+            <input id="habitTime" type="number" placeholder="Time (min)">
+          </div>
+
+          <select id="habitPreset" class="quest-select">
+            <option value="">Select Quest Type</option>
+            <option value="workout">🏋 Workout</option>
+            <option value="study">📘 Study</option>
+            <option value="focus">🧠 Focus</option>
+            <option value="speed">⚡ Speed</option>
+            <option value="discipline">🔥 Discipline</option>
+            <option value="streak">🔥 Daily Streak</option>
+          </select>
+
+          <select id="habitDifficulty" class="quest-select">
+            <option value="easy">🟢 Easy</option>
+            <option value="normal" selected>🟡 Normal</option>
+            <option value="hard">🔴 Hard</option>
+            <option value="extreme">⚫ Extreme</option>
+          </select>
+
+          <select id="habitTimerMode" class="quest-select">
+            <option value="fail" selected>⏱ Fail if timeout</option>
+            <option value="auto-complete">⏱ Auto-complete after timeout</option>
+          </select>
+
+          <div class="quest-stats">
+            <input id="str" type="number" placeholder="STR">
+            <input id="agi" type="number" placeholder="AGI">
+            <input id="end" type="number" placeholder="END">
+            <input id="spd" type="number" placeholder="SPD">
+            <input id="int" type="number" placeholder="INT">
+            <input id="ctrl" type="number" placeholder="CTRL">
+          </div>
+
+          <button class="quest-btn" id="addQuestBtn">REGISTER QUEST</button>
+
+          <button class="quest-btn quest-btn--secondary" id="createChainBtn" type="button">CREATE CHAIN</button>
+
+          <div id="chainCreator" class="chain-creator hidden">
+            <div class="chain-creator__head">
+              <div class="chain-creator__title">Quest Chain Builder</div>
+              <button id="chainCreatorCloseBtn" type="button" class="btn btn--ghost">Close</button>
+            </div>
+
+            <input id="chainName" placeholder="Chain Name">
+            <input id="chainDesc" placeholder="Chain Description (optional)">
+
+            <div class="chain-creator__sectionTitle">Steps</div>
+            <div id="chainSteps"></div>
+
+            <div class="chain-creator__row">
+              <button id="addChainStepBtn" type="button">+ Add Step</button>
+              <button id="clearChainStepsBtn" type="button" class="reset-btn">Clear</button>
+            </div>
+
+            <div class="chain-creator__sectionTitle">Final Reward</div>
+            <div class="chain-final-grid">
+              <input id="chainFinalXP" type="number" min="0" placeholder="Final XP">
+              <input id="chainFinalCoins" type="number" min="0" placeholder="Final Coins">
+            </div>
+
+            <button id="saveChainBtn" type="button" class="quest-btn">START CHAIN</button>
+          </div>
+
+          <div id="chainList" class="chain-list"></div>
+
+          <!-- ================= QUEST TREE ================= -->
+          <button class="quest-btn quest-btn--secondary" id="createTreeBtn" type="button">CREATE QUEST TREE</button>
+
+          <div id="treeCreator" class="tree-creator hidden">
+            <div class="tree-creator__head">
+              <div class="tree-creator__title">Quest Tree Builder</div>
+              <button id="treeCreatorCloseBtn" type="button" class="btn btn--ghost">Close</button>
+            </div>
+
+            <input id="treeName" placeholder="Tree Name">
+            <input id="treeDesc" placeholder="Tree Description (optional)">
+
+            <div class="tree-creator__sectionTitle">Nodes</div>
+            <div id="treeNodes"></div>
+
+            <div class="tree-creator__row">
+              <button id="addTreeNodeBtn" type="button">+ Add Node</button>
+              <button id="clearTreeNodesBtn" type="button" class="reset-btn">Clear</button>
+            </div>
+
+            <div class="tree-creator__sectionTitle">Final Reward (when ALL nodes completed)</div>
+            <div class="tree-final-grid">
+              <input id="treeFinalXP" type="number" min="0" placeholder="Final XP">
+              <input id="treeFinalCoins" type="number" min="0" placeholder="Final Coins">
+            </div>
+
+            <button id="saveTreeBtn" type="button" class="quest-btn">START TREE</button>
+          </div>
+
+          <div id="treeList" class="tree-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= CODEX SYSTEM ================= -->
+    <div class="container codex-container quests panel" data-title="CODEX">
+
+      <div class="panel codex-panel">
+
+        <h1>Codex</h1>
+
+        <select id="codexSource" class="quest-select">
+          <option value="">Select Platform</option>
+          <option value="codeforces">Codeforces</option>
+          <option value="leetcode">LeetCode</option>
+        </select>
+
+        <button id="codexInitBtn">INITIALIZE</button>
+        <div class="codex-streak-display">
+          <div>🔥 Today: <span id="codexTodayCount">0</span></div>
+          <div>📅 Daily Streak: <span id="codexDailyStreak">0</span></div>
+          <div id="codexStreakStatus"></div>
+        </div>
+
+        <div id="codexDynamicPanel" style="margin-top:15px;"></div>
+
+      </div>
+    </div>
+
+    <!-- ================= JOURNAL ================= -->
+    <div class="container journal-container quests panel" data-title="FUTURE JOURNAL">
+
+      <div class="panel journal-panel">
+        <textarea id="futureJournal" placeholder="Write future targets, ideas, long-term plans..."></textarea>
+      </div>
+
+    </div>
+
+    <!-- ================= ACTIVE QUESTS ================= -->
+    <div class="container active-quests-container quests panel" data-title="ACTIVE QUESTS">
+      <section id="questSection">
+        <ul id="habitList" class="habit-list"></ul>
+      </section>
+    </div>
+
+    <!-- ================= STREAK ALTAR ================= -->
+    <div class="container streak-container streaks panel" data-title="STREAK ALTAR">
+      <section class="panel streak-panel">
+        <ul id="streakList" class="habit-list"></ul>
+      </section>
+    </div>
+
+  </div>
+
+  <!-- ================= SYSTEM POPUP ================= -->
+  <div id="systemPopupContainer" class="system-popup-container">
+    <div class="system-box">
+      <p id="systemMessage"></p>
+    </div>
+  </div>
+
+  <div id="systemWarningModal" class="system-modal hidden">
+    <div class="system-modal-box">
+      <h2>SYSTEM WARNING</h2>
+      <p id="systemWarningText"></p>
+      <div class="system-modal-actions">
+        <button id="systemCancelBtn">CANCEL</button>
+        <button id="systemConfirmBtn" class="danger">AUTHORIZE TERMINATION</button>
+      </div>
+    </div>
+  </div>
+  <!-- ================= EDIT QUEST MODAL (UPGRADED UI) ================= -->
+  <div id="editQuestModal" class="modal hidden">
+    <div class="modal__card">
+      <div class="modal__header">
+        <div class="modal__titlewrap">
+          <div class="modal__title">Edit Quest</div>
+          <div class="modal__subtitle">Tune XP and stat rewards without losing progress</div>
+        </div>
+        <button class="modal__x" id="editQuestCancelBtn" aria-label="Close">✕</button>
+      </div>
+
+      <div class="modal__body">
+        <!-- Left: core fields -->
+        <div class="editgrid">
+          <div class="field">
+            <label class="label">Quest Name</label>
+            <input id="editQuestName" class="input" placeholder="Quest Name">
+          </div>
+
+          <div class="field">
+            <label class="label">Base XP</label>
+            <div class="inputgroup">
+              <span class="chip">XP</span>
+              <input id="editQuestXP" class="input input--num" type="number" min="1" step="1" placeholder="100">
+            </div>
+          </div>
+
+          <!-- Optional: non-streak only -->
+          <div class="field" id="editTimeWrap">
+            <label class="label">Time Limit (minutes)</label>
+            <input id="editQuestTime" class="input input--num" type="number" min="0" step="1" placeholder="0">
+            <div class="hint">Set 0 for no timer</div>
+          </div>
+
+          <div class="field" id="editModeWrap">
+            <label class="label">Timer Mode</label>
+            <select id="editQuestTimerMode" class="select">
+              <option value="fail">⏱ Fail if timeout</option>
+              <option value="auto-complete">⏱ Auto-complete after timeout</option>
+            </select>
+          </div>
+
+          <!-- Right: stats panel -->
+          <div class="statsPanel">
+            <div class="statsPanel__head">
+              <div class="statsPanel__title">Rewards</div>
+              <div class="statsPanel__sub">Increase stats granted on completion</div>
+            </div>
+
+            <div class="statsRows">
+              <div class="statRow">
+                <div class="statRow__label">STR</div>
+                <div class="stepper">
+                  <button type="button" class="stepper__btn" data-step="editStr" data-dir="-1">−</button>
+                  <input id="editStr" class="stepper__input" type="number" min="0" step="1" value="0">
+                  <button type="button" class="stepper__btn" data-step="editStr" data-dir="1">+</button>
+                </div>
+              </div>
+
+              <div class="statRow">
+                <div class="statRow__label">AGI</div>
+                <div class="stepper">
+                  <button type="button" class="stepper__btn" data-step="editAgi" data-dir="-1">−</button>
+                  <input id="editAgi" class="stepper__input" type="number" min="0" step="1" value="0">
+                  <button type="button" class="stepper__btn" data-step="editAgi" data-dir="1">+</button>
+                </div>
+              </div>
+
+              <div class="statRow">
+                <div class="statRow__label">END</div>
+                <div class="stepper">
+                  <button type="button" class="stepper__btn" data-step="editEnd" data-dir="-1">−</button>
+                  <input id="editEnd" class="stepper__input" type="number" min="0" step="1" value="0">
+                  <button type="button" class="stepper__btn" data-step="editEnd" data-dir="1">+</button>
+                </div>
+              </div>
+
+              <div class="statRow">
+                <div class="statRow__label">SPD</div>
+                <div class="stepper">
+                  <button type="button" class="stepper__btn" data-step="editSpd" data-dir="-1">−</button>
+                  <input id="editSpd" class="stepper__input" type="number" min="0" step="1" value="0">
+                  <button type="button" class="stepper__btn" data-step="editSpd" data-dir="1">+</button>
+                </div>
+              </div>
+
+              <div class="statRow">
+                <div class="statRow__label">INT</div>
+                <div class="stepper">
+                  <button type="button" class="stepper__btn" data-step="editInt" data-dir="-1">−</button>
+                  <input id="editInt" class="stepper__input" type="number" min="0" step="1" value="0">
+                  <button type="button" class="stepper__btn" data-step="editInt" data-dir="1">+</button>
+                </div>
+              </div>
+
+              <div class="statRow">
+                <div class="statRow__label">CTRL</div>
+                <div class="stepper">
+                  <button type="button" class="stepper__btn" data-step="editCtrl" data-dir="-1">−</button>
+                  <input id="editCtrl" class="stepper__input" type="number" min="0" step="1" value="0">
+                  <button type="button" class="stepper__btn" data-step="editCtrl" data-dir="1">+</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="preview">
+              <div class="preview__title">Preview</div>
+              <div class="preview__line"><span id="editPreviewName">—</span></div>
+              <div class="preview__pillrow">
+                <span class="pill" id="editPreviewXP">+0 XP</span>
+                <span class="pill" id="editPreviewStats">+0 total stats</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal__footer">
+        <button class="btn btn--ghost" id="editQuestCancelBtn2" type="button">Cancel</button>
+        <button class="btn btn--primary" id="editQuestSaveBtn" type="button">Save Changes</button>
+      </div>
+    </div>
+  </div>
+  
+  <script src="model.js" defer></script>
+
+</body>
+
+</html>
